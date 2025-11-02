@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrian R. Tataro</title>
+    <link rel="icon" type="image/x-icon" href="assets/logo.svg">
+    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <nav>
+                <div class="box" id="box1">
+                    <a href="https://www.facebook.com/DepedTayoTaytaySeniorHS.342569?mibextid=ZbWKwL">
+                        <img src="assets/logo.svg" class="logo" id="box1">
+                    </a>
+                </div>
+                <img src="assets/adrian.svg" class="logo">  
+                <div class="openMenu"><i class="fa fa-bars"></i></div>
+                <ul class="mainMenu">
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="gallery.html">GALLERY</a></li> 
+                    <li><a href="resume.html">RESUME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                    <div class="closeMenu"><i class="fa fa-times"></i></div>
+                    <span class="icons">
+                        <a href="https://www.facebook.com/share/1AsnCJMEmv/"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/itzzianrt?igsh=MW01MHlsNHFwZWdldg=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://bsky.app/profile/ianrem.bsky.social"><i class="fa-brands fa-bluesky"></i></a>
+                        <a href="https://10dumplings.carrd.co/"><i class="fa-solid fa-link"></i></a>
+                        <a href="https://boxd.it/aoNG5"><i class="fa-brands fa-letterboxd"></i></a>
+                    </span>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h1>ABOUT</h1>
+            <p>ADRIAN R. TATARO</p>
+        </div>
+    
+        <div class="abouti">
+            <h1>ABOUT ME:</h1>
+            <h2>ADRIAN R. TATARO</h2>
+            <h3>
+                Hey there! <br>I'm Adrian, a student currently studying DIT at Polytechnic University of the Philippines. This website serves as my digital journal and personal space, where I reflect on my experiences and document my growth as a learner. You'll find a mix of everything here: from photos and stories from my adventures to notes and reflections on the things I'm learning – maybe even a few experiments! I believe in the power of reflection, and I'm excited to share my journey with you. Come on in and have a look around!
+            </h3>
+            <h6>-Adrian R. Tataro</h6>    
+        </div>
+
+        <!-- Total run time since creation (set start date in data-start) -->
+                <div class="runtime">
+                        <h4>Total run time:</h4>
+                        <p id="runTime" data-start="2005-01T00:00:00Z">Calculating...</p>
+                        <!-- Inline fallback: compute and display elapsed time immediately in case external JS is delayed or blocked -->
+                        <script>
+                        (function(){
+                            try{
+                                const el = document.getElementById('runTime');
+                                if(!el) return;
+                                const raw = (el.getAttribute('data-start')||'2020-01-01T00:00:00Z').trim();
+                                let start = new Date(raw);
+                                if (isNaN(start)) {
+                                    if (/^\d{4}-\d{2}$/.test(raw)) start = new Date(raw + '-01T00:00:00Z');
+                                    else if (/^\d{4}$/.test(raw)) start = new Date(raw + '-01-01T00:00:00Z');
+                                }
+                                if (isNaN(start)) return;
+                                function formatElapsed(ms){
+                                    const totalSec = Math.floor(ms/1000);
+                                    const years = Math.floor(totalSec/(3600*24*365));
+                                    const days = Math.floor((totalSec % (3600*24*365)) / (3600*24));
+                                    const hours = Math.floor((totalSec % (3600*24)) / 3600);
+                                    const minutes = Math.floor((totalSec % 3600) / 60);
+                                    const seconds = totalSec % 60;
+                                    const parts = [];
+                                    if (years) parts.push(years + 'y');
+                                    if (days) parts.push(days + 'd');
+                                    parts.push(String(hours).padStart(2,'0') + 'h');
+                                    parts.push(String(minutes).padStart(2,'0') + 'm');
+                                    parts.push(String(seconds).padStart(2,'0') + 's');
+                                    return parts.join(' ');
+                                }
+                                el.textContent = formatElapsed(Date.now() - start);
+                            }catch(e){/* noop */}
+                        })();
+                        </script>
+        
+                </div>
+    
+        <hr>
+    
+        <div class="logos">
+            <div class="logos-slide">
+                <img src="assets/13.svg" alt="Logo 1" />
+                <img src="assets/14.svg" alt="Logo 2" />
+                <img src="assets/15.svg" alt="Logo 3" />
+                <img src="assets/16.svg" alt="Logo 4" />
+                <img src="assets/17.svg" alt="Logo 5" />
+            </div>
+            <div class="logos-slide">
+                <img src="assets/13.svg" alt="Logo 1" />
+                <img src="assets/14.svg" alt="Logo 2" />
+                <img src="assets/15.svg" alt="Logo 3" />
+                <img src="assets/16.svg" alt="Logo 4" />
+                <img src="assets/17.svg" alt="Logo 5" />
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
+
+

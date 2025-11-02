@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrian R. Tataro</title>
+    <link rel="icon" type="image/x-icon" href="assets/logo.svg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <nav>
+                <div class="box" id="box1">
+                    <a href="https://www.facebook.com/share/1AsnCJMEmv/">
+                        <img src="assets/logo.svg" class="logo" id="box1">
+                    </a>
+                </div>
+                <img src="assets/adrian.svg" class="logo">
+                <div class="openMenu"><i class="fa fa-bars"></i></div>
+                <ul class="mainMenu">
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="gallery.html">GALLERY</a></li>
+                    <li><a href="resume.html">RESUME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                    <div class="closeMenu"><i class="fa fa-times"></i></div>
+                    <span class="icons">
+                        <a href="https://www.facebook.com/share/1AsnCJMEmv/"><i class="fab fa-facebook"></i></a>
+                        <a href="https://www.instagram.com/itzzianrt?igsh=MW01MHlsNHFwZWdldg=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://bsky.app/profile/ianrem.bsky.social"><i class="fa-brands fa-bluesky"></i></a>
+                        <a href="https://10dumplings.carrd.co/"><i class="fa-solid fa-link"></i></a>
+                        <a href="https://boxd.it/aoNG5"><i class="fa-brands fa-letterboxd"></i></a>
+                    </span>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="content">
+            <h1>ADRIAN<br>PORTFOLIO <h6>Dead Poets Honour</h6></h1>
+            <p>© <span id="year"></span></p>
+            <!-- Inline fallback: set copyright year immediately in case external JS is blocked or cached -->
+            <script>try{const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();}catch(e){/* noop */}</script>
+        </div>
+
+        <div class="stars">
+            <div class="starsec"></div>
+            <div class="starthird"></div>
+            <div class="starfourth"></div>
+            <div class="starfifth"></div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="scrolling-text-container">
+            <nav2>
+                <marquee behavior="" direction="left">
+                    <h3>
+                        <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">Webpage</span> by <span property="cc:attributionName">Adrian R. Tataro</span> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+                    </h3>
+                </marquee>
+            </nav2>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,281 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #040720;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+}
+
+.banner {
+  width: 100%;
+  min-height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(assets/background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+   /*padding: 1rem;*/
+}
+
+nav {
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.logo {
+  width: 50px;
+  cursor: pointer;
+}
+
+#box1 {
+  animation: logo 5s infinite linear;
+}
+
+@keyframes logo {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(359deg);
+  }
+}
+
+.mainMenu {
+  display: flex;
+  list-style: none;
+}
+
+.mainMenu li a {
+  display: inline-block;
+  padding: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+}
+
+.mainMenu li a:hover {
+  background: rgb(255, 94, 0);
+}
+
+.openMenu,
+.closeMenu {
+  font-size: 2rem;
+  display: none;
+  cursor: pointer;
+}
+.icons i {
+  color: white;
+  font-size: 2rem;
+  margin: 0 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+
+.fa-facebook:hover {
+  color: rgb(0, 110, 255);
+}
+.fa-bluesky:hover {
+  color: rgb(86, 154, 243);
+}
+.fa-instagram:hover {
+  color: rgb(255, 0, 191);
+}
+.fa-link:hover {
+  color: rgb(255, 123, 0);
+}
+.fa-letterboxd:hover {
+  color: green;
+}
+
+.content {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cont {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.cont h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cont h3 {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.cont h4,
+.cont p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cont i {
+  margin-right: 10px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.social-icons a {
+  font-size: 2rem;
+  color: #fff;
+  transition: 0.2s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+  margin-bottom: 1rem;
+}
+
+.map-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.contact-container {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-form-title {
+  margin-bottom: 1rem;
+}
+
+.contact-inputs {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.contact-inputs::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+textarea.contact-inputs {
+  min-height: 150px;
+  resize: vertical;
+}
+
+button[type="submit"] {
+  background-color: #ff5e00;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #ff7f00;
+}
+
+.kk {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.1rem;
+}
+
+@media (max-width: 800px) {
+  .mainMenu {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgb(0, 0, 0);
+    transition: top 1s ease;
+    display: none;
+  }
+
+  .mainMenu .closeMenu {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .openMenu {
+    display: block;
+  }
+
+  .mainMenu li a:hover {
+    background: none;
+    color: rgb(255, 123, 0);
+  }
+
+  .icons i {
+    margin: 0 10px;
+  }
+
+  .content h1 {
+    font-size: 2rem;
+  }
+
+  .content h6 {
+    font-size: 0.9rem;
+  }
+
+  .cont h2 {
+    font-size: 1.75rem;
+  }
+
+  .cont h3 {
+    font-size: 1.25rem;
+  }
+
+  .social-icons {
+    flex-wrap: wrap;
+  }
+}
+
+

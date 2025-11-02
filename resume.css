@@ -1,0 +1,231 @@
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #040720;
+  font-family: "Montserrat", sans-serif;
+  color: #fff;
+}
+
+.banner {
+  width: 100%;
+  min-height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url(assets/background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+   /*padding: 1rem;*/
+}
+
+nav {
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+padding: 1rem;
+}
+
+.logo {
+  width: 50px;
+  cursor: pointer;
+}
+
+#box1 {
+  animation: logo 5s infinite linear;
+}
+
+@keyframes logo {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(359deg);
+  }
+}
+
+.mainMenu {
+  display: flex;
+  list-style: none;
+}
+
+.mainMenu li a {
+  display: inline-block;
+  padding: 15px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  font-size: 1.1rem;
+  transition: 0.2s ease;
+}
+
+.mainMenu li a:hover {
+  background: rgb(255, 94, 0);
+}
+
+.openMenu,
+.closeMenu {
+  font-size: 2rem;
+  display: none;
+  cursor: pointer;
+}
+
+.icons i {
+  color: white;
+  font-size: 2rem;
+  margin: 0 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.fa-facebook:hover {
+  color: rgb(0, 110, 255);
+}
+.fa-bluesky:hover {
+  color: rgb(86, 154, 243);
+}
+.fa-instagram:hover {
+  color: rgb(255, 0, 191);
+}
+.fa-link:hover {
+  color: rgb(255, 123, 0);
+}
+.fa-letterboxd:hover {
+  color: green;
+}
+
+.content {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.resume-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  
+}
+
+.resume-section {
+  margin-bottom: 2rem;
+}
+
+.resume-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ff5e00;
+}
+
+.resume-item {
+  margin-bottom: 1rem;
+}
+
+.resume-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.skills-list,
+.interests-list {
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.skills-list li,
+.interests-list li {
+  background-color: rgba(255, 94, 0, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+.download-resume {
+  text-align: center;
+  margin-top: 2rem;
+  padding-bottom: 20px;
+}
+
+.download-btn {
+  display: inline-block;
+  background-color: #ff5e00;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+  background-color: #ff7f00;
+}
+
+@media (max-width: 800px) {
+  .mainMenu {
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgb(0, 0, 0);
+    transition: top 1s ease;
+    display: none;
+  }
+
+  .mainMenu .closeMenu {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .openMenu {
+    display: block;
+  }
+
+  .mainMenu li a:hover {
+    background: none;
+    color: rgb(255, 123, 0);
+  }
+
+  .icons i {
+    margin: 0 10px;
+  }
+
+  .content h1 {
+    font-size: 2rem;
+  }
+
+  .content h6 {
+    font-size: 0.9rem;
+  }
+
+  .resume-container {
+    padding: 1rem;
+  }
+
+  .resume-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .resume-item h3 {
+    font-size: 1.1rem;
+  }
+}
+
+
