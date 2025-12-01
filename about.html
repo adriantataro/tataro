@@ -56,13 +56,15 @@
         <!-- Total run time since creation (set start date in data-start) -->
                 <div class="runtime">
                         <h4>Total run time:</h4>
-                        <p id="runTime" data-start="2005-01T00:00:00Z">Calculating...</p>
+                        <p id="runTime" data-start="2004-11-30T00:00:00Z">Calculating...</p>
                         <!-- Inline fallback: compute and display elapsed time immediately in case external JS is delayed or blocked -->
                         <script>
                         (function(){
                             try{
                                 const el = document.getElementById('runTime');
                                 if(!el) return;
+                                // Mark that inline script is managing the runtime so external script won't start another interval
+                                window.__runTimeManaged = true;
                                 const raw = (el.getAttribute('data-start')||'2020-01-01T00:00:00Z').trim();
                                 let start = new Date(raw);
                                 if (isNaN(start)) {
@@ -70,22 +72,43 @@
                                     else if (/^\d{4}$/.test(raw)) start = new Date(raw + '-01-01T00:00:00Z');
                                 }
                                 if (isNaN(start)) return;
-                                function formatElapsed(ms){
-                                    const totalSec = Math.floor(ms/1000);
-                                    const years = Math.floor(totalSec/(3600*24*365));
-                                    const days = Math.floor((totalSec % (3600*24*365)) / (3600*24));
-                                    const hours = Math.floor((totalSec % (3600*24)) / 3600);
-                                    const minutes = Math.floor((totalSec % 3600) / 60);
-                                    const seconds = totalSec % 60;
+
+                                function computeParts(start, now){
+                                    let years = now.getFullYear() - start.getFullYear();
+                                    const anniv = new Date(start);
+                                    anniv.setFullYear(start.getFullYear() + years);
+                                    if (anniv > now) {
+                                        years--;
+                                        anniv.setFullYear(start.getFullYear() + years);
+                                    }
+                                    const msSinceAnniv = now - anniv;
+                                    const days = Math.floor(msSinceAnniv / (24*3600*1000));
+                                    let rem = msSinceAnniv - days * 24*3600*1000;
+                                    const hours = Math.floor(rem / (3600*1000)); rem -= hours * 3600*1000;
+                                    const minutes = Math.floor(rem / (60*1000)); rem -= minutes * 60*1000;
+                                    const seconds = Math.floor(rem / 1000);
+                                    return { years, days, hours, minutes, seconds };
+                                }
+
+                                function formatParts(p){
                                     const parts = [];
-                                    if (years) parts.push(years + 'y');
-                                    if (days) parts.push(days + 'd');
-                                    parts.push(String(hours).padStart(2,'0') + 'h');
-                                    parts.push(String(minutes).padStart(2,'0') + 'm');
-                                    parts.push(String(seconds).padStart(2,'0') + 's');
+                                    if (p.years) parts.push(p.years + 'y');
+                                    if (p.days || p.years) parts.push(p.days + 'd');
+                                    parts.push(String(p.hours).padStart(2,'0') + 'h');
+                                    parts.push(String(p.minutes).padStart(2,'0') + 'm');
+                                    parts.push(String(p.seconds).padStart(2,'0') + 's');
                                     return parts.join(' ');
                                 }
-                                el.textContent = formatElapsed(Date.now() - start);
+
+                                function tick(){
+                                    const now = new Date();
+                                    const p = computeParts(start, now);
+                                    el.textContent = formatParts(p);
+                                }
+
+                                tick();
+                                // update every second
+                                window.__runTimeInterval = window.__runTimeInterval || setInterval(tick, 1000);
                             }catch(e){/* noop */}
                         })();
                         </script>

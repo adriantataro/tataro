@@ -217,8 +217,8 @@ button[type="submit"]:hover {
 
 .kk {
   text-align: center;
-  margin-top: 2rem;
-  font-size: 0.1rem;
+  margin-top: 1rem;
+  font-size: 0.300rem;
 }
 
 @media (max-width: 800px) {

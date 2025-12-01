@@ -80,10 +80,32 @@ window.addEventListener("resize", () => {
 
 
   /* Auto-update copyright year in index.html */
-  (function updateCopyrightYear(){
+  (function autoUpdateCopyrightYear(){
     try {
       const el = document.getElementById('year');
-      if (el) el.textContent = new Date().getFullYear();
+      if (!el) return;
+      const setYear = () => { el.textContent = new Date().getFullYear(); };
+      setYear();
+
+      // Schedule next update exactly at the start of the next year (local time)
+      const MAX_TIMEOUT = 2147483647; // max setTimeout on many browsers (~24.8 days)
+      function scheduleNext() {
+        const now = new Date();
+        const nextJan1 = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
+        let ms = nextJan1 - now;
+        if (ms <= 0) {
+          // if somehow non-positive, update immediately and reschedule
+          setYear();
+          ms = 1000;
+        }
+        // If ms is larger than the max timeout, schedule a nearer wake-up to re-evaluate
+        if (ms > MAX_TIMEOUT) {
+          setTimeout(scheduleNext, MAX_TIMEOUT);
+        } else {
+          setTimeout(() => { setYear(); scheduleNext(); }, ms);
+        }
+      }
+      scheduleNext();
     } catch (e) { /* ignore on pages without the element */ }
   })();
 
@@ -91,6 +113,8 @@ window.addEventListener("resize", () => {
   (function runTimeCounter(){
     const el = document.getElementById('runTime');
     if (!el) return;
+    // If an inline fallback is already managing updates, don't start another interval
+    if (window.__runTimeManaged) return;
 
     // Read start from data-start attribute (ISO-like string). Default: 2020-01-01
     const startAttr = (el.getAttribute('data-start') || '2020-01-01T00:00:00Z').trim();
@@ -110,26 +134,39 @@ window.addEventListener("resize", () => {
       return;
     }
 
-    function formatElapsed(ms) {
-      const totalSec = Math.floor(ms / 1000);
-      const years = Math.floor(totalSec / (3600*24*365));
-      const days = Math.floor((totalSec % (3600*24*365)) / (3600*24));
-      const hours = Math.floor((totalSec % (3600*24)) / 3600);
-      const minutes = Math.floor((totalSec % 3600) / 60);
-      const seconds = totalSec % 60;
+    function computeParts(start, now) {
+      // compute full years elapsed (exact, accounting for leap years)
+      let years = now.getFullYear() - start.getFullYear();
+      const anniv = new Date(start);
+      anniv.setFullYear(start.getFullYear() + years);
+      if (anniv > now) {
+        years--;
+        anniv.setFullYear(start.getFullYear() + years);
+      }
+      // days since last anniversary
+      const msSinceAnniv = now - anniv;
+      const days = Math.floor(msSinceAnniv / (24*3600*1000));
+      let rem = msSinceAnniv - days * 24*3600*1000;
+      const hours = Math.floor(rem / (3600*1000)); rem -= hours * 3600*1000;
+      const minutes = Math.floor(rem / (60*1000)); rem -= minutes * 60*1000;
+      const seconds = Math.floor(rem / 1000);
+      return { years, days, hours, minutes, seconds };
+    }
+
+    function formatParts(p) {
       const parts = [];
-      if (years) parts.push(years + 'y');
-      if (days) parts.push(days + 'd');
-      parts.push(String(hours).padStart(2,'0') + 'h');
-      parts.push(String(minutes).padStart(2,'0') + 'm');
-      parts.push(String(seconds).padStart(2,'0') + 's');
+      if (p.years) parts.push(p.years + 'y');
+      if (p.days || p.years) parts.push(p.days + 'd');
+      parts.push(String(p.hours).padStart(2,'0') + 'h');
+      parts.push(String(p.minutes).padStart(2,'0') + 'm');
+      parts.push(String(p.seconds).padStart(2,'0') + 's');
       return parts.join(' ');
     }
 
     function update() {
       const now = new Date();
-      const elapsed = now - start;
-      el.textContent = formatElapsed(elapsed);
+      const p = computeParts(start, now);
+      el.textContent = formatParts(p);
     }
 
     update();

@@ -42,8 +42,27 @@
         <div class="content">
             <h1>ADRIAN<br>PORTFOLIO <h6>Dead Poets Honour</h6></h1>
             <p>© <span id="year"></span></p>
-            <!-- Inline fallback: set copyright year immediately in case external JS is blocked or cached -->
-            <script>try{const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();}catch(e){/* noop */}</script>
+                        <!-- Inline scheduled fallback: set copyright year immediately and auto-update at each new year -->
+                        <script>
+                        (function(){
+                            try{
+                                const el = document.getElementById('year');
+                                if(!el) return;
+                                const setYear = () => { el.textContent = new Date().getFullYear(); };
+                                setYear();
+                                const MAX_TIMEOUT = 2147483647;
+                                function scheduleNext(){
+                                    const now = new Date();
+                                    const nextJan1 = new Date(now.getFullYear()+1,0,1,0,0,0,0);
+                                    let ms = nextJan1 - now;
+                                    if (ms <= 0) { setYear(); ms = 1000; }
+                                    if (ms > MAX_TIMEOUT) setTimeout(scheduleNext, MAX_TIMEOUT);
+                                    else setTimeout(()=>{ setYear(); scheduleNext(); }, ms);
+                                }
+                                scheduleNext();
+                            }catch(e){/* noop */}
+                        })();
+                        </script>
         </div>
 
         <div class="stars">
