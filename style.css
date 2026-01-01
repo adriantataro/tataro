@@ -19,13 +19,18 @@ body {
   background-attachment: fixed;
   display: flex;
   flex-direction: column;
-   /*padding: 1rem;*/
+  padding-top: 70px; /* reserve space for fixed navbar */
 }
 
 .navbar {
-  background: rgb(0, 0, 0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.95);
   color: rgb(255, 255, 255);
-  padding: 1rem;
+  padding: 0.2rem;
 }
 
 nav {
