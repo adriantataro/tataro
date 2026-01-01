@@ -185,10 +185,6 @@ hr {
   background: linear-gradient(to right, rgba(0, 0, 0, 0), black);
 }
 
-.logos:hover .logos-slide {
-  animation-play-state: paused;
-}
-
 .logos-slide {
   display: inline-block;
   animation: 10s slide infinite linear;
