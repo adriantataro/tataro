@@ -84,6 +84,10 @@ nav {
   cursor: pointer;
 }
 
+.icons {
+  display: none;
+}
+
 .icons i {
   color: white;
   font-size: 2rem;

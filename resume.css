@@ -84,6 +84,10 @@ padding: 0.2rem;
   cursor: pointer;
 }
 
+.icons {
+  display: none;
+}
+
 .icons i {
   color: white;
   font-size: 2rem;
@@ -211,6 +215,12 @@ padding: 0.2rem;
   .mainMenu li a:hover {
     background: none;
     color: rgb(255, 123, 0);
+  }
+  .icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
   }
 
   .icons i {
