@@ -86,31 +86,30 @@
 
 
         <div class="kk">
-            <h2>ADRIAN R. TATARO <br> <i class="fa-regular fa-copyright"></i>
-                                 <span id="year"></span>
-                                 <script>
-                                 (function(){
-                                     try{
-                                         const el = document.getElementById('year');
-                                         if(!el) return;
-                                         const setYear = () => { el.textContent = new Date().getFullYear(); };
-                                         setYear();
-                                         const MAX_TIMEOUT = 2147483647;
-                                         function scheduleNext(){
-                                             const now = new Date();
-                                             const nextJan1 = new Date(now.getFullYear()+1,0,1,0,0,0,0);
-                                             let ms = nextJan1 - now;
-                                             if (ms <= 0) { setYear(); ms = 1000; }
-                                             if (ms > MAX_TIMEOUT) setTimeout(scheduleNext, MAX_TIMEOUT);
-                                             else setTimeout(()=>{ setYear(); scheduleNext(); }, ms);
-                                         }
-                                         scheduleNext();
-                                     }catch(e){/* noop */}
-                                 })();
-                                 </script>
-                
-                <br> All Rights Reserved
-            </h2>
+            <h2>ADRIAN R. TATARO</h2>
+            <p>© 2024 - <span id="year"></span></p>
+            <p>All Rights Reserved.</p>
+            <!-- Inline scheduled fallback: set copyright year immediately and auto-update at each new year -->
+            <script>
+            (function(){
+                try{
+                    const el = document.getElementById('year');
+                    if(!el) return;
+                    const setYear = () => { el.textContent = new Date().getFullYear(); };
+                    setYear();
+                    const MAX_TIMEOUT = 2147483647;
+                    function scheduleNext(){
+                        const now = new Date();
+                        const nextJan1 = new Date(now.getFullYear()+1,0,1,0,0,0,0);
+                        let ms = nextJan1 - now;
+                        if (ms <= 0) { setYear(); ms = 1000; }
+                        if (ms > MAX_TIMEOUT) setTimeout(scheduleNext, MAX_TIMEOUT);
+                        else setTimeout(()=>{ setYear(); scheduleNext(); }, ms);
+                    }
+                    scheduleNext();
+                }catch(e){/* noop */}
+            })();
+            </script>
         </div>
     </div>
 
