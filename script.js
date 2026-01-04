@@ -18,25 +18,20 @@ if (menu_items && menu_items.length) {
 }
 
 function show() {
-  if (!mainMenu) return;
-  mainMenu.style.display = "flex"
-  mainMenu.style.top = "0"
+  if (!mainMenu) return
+  mainMenu.classList.add("is-open")
 }
 
 function close() {
-  if (!mainMenu) return;
-  mainMenu.style.top = "-100%"
+  if (!mainMenu) return
+  mainMenu.classList.remove("is-open")
 }
 
-// Add resize event listener to handle menu visibility on screen size change
+// Ensure desktop layout is always visible and reset mobile state on resize
 window.addEventListener("resize", () => {
-  if (!mainMenu) return;
+  if (!mainMenu) return
   if (window.innerWidth > 800) {
-    mainMenu.style.display = "flex"
-    mainMenu.style.top = "0"
-  } else {
-    mainMenu.style.display = "none"
-    mainMenu.style.top = "-100%"
+    mainMenu.classList.remove("is-open")
   }
 })
 

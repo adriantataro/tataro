@@ -161,8 +161,17 @@ footer {
     justify-content: center;
     align-items: center;
     background: rgb(0, 0, 0);
-    transition: top 1s ease;
-    display: none;
+    /* Start hidden above the viewport; animate in when opened */
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .mainMenu.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .mainMenu .closeMenu {

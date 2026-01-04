@@ -1,0 +1,278 @@
+/* Floating AI assistant widget */
+
+#ai-assistant {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+#ai-assistant-toggle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #ffb3b3 35%, #b31217 100%);
+    color: #1a0505;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+#ai-assistant-toggle i {
+    font-size: 22px;
+}
+
+/* Subtle "blinking" animation for the robot icon */
+#ai-assistant-toggle i.fa-robot {
+    animation: ai-eye-blink 2.5s infinite ease-in-out;
+    transform-origin: center 60%;
+}
+
+#ai-assistant-toggle:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    border-color: rgba(255, 230, 230, 0.95);
+}
+
+#ai-assistant-toggle:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Popup panel */
+
+#ai-assistant-popup {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 320px;
+    max-width: calc(100% - 40px);
+    max-height: 70vh;
+    background: rgba(20, 0, 4, 0.93);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+
+#ai-assistant-popup.open {
+    display: flex;
+    animation: ai-fade-in 0.25s ease-out;
+}
+
+.ai-assistant-header {
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #5c0000 0%, #b31217 45%, #ff4b2b 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ai-assistant-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.ai-assistant-close {
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.ai-assistant-body {
+    padding: 10px 12px 12px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ai-assistant-response {
+    min-height: 60px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 8px 10px;
+    background: rgba(30, 0, 5, 0.9);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 76, 76, 0.55);
+    font-size: 13px;
+    color: #fbecec;
+}
+
+.ai-assistant-response.show {
+    display: block;
+}
+
+.ai-assistant-input-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+#ai-assistant-input {
+    flex: 1;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #d0d0d0;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#ai-assistant-input:focus {
+    border-color: #667eea;
+}
+
+#ai-assistant-send {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #5c0000 0%, #b31217 45%, #ff4b2b 100%);
+}
+
+#ai-assistant-send:hover {
+    filter: brightness(1.05);
+}
+
+.ai-assistant-hints {
+    font-size: 11px;
+    color: #666666;
+}
+
+.ai-assistant-hints span {
+    display: block;
+}
+
+.ai-loading {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #e0e0e0;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: ai-spin 1s linear infinite;
+    margin-right: 6px;
+}
+
+/* Threaded messages */
+
+.ai-msg {
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+}
+
+.ai-msg-who {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.ai-msg-text {
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: #2b0005;
+    color: #fdf4f4;
+}
+
+.ai-msg-user .ai-msg-text {
+    background: #4d0005;
+    align-self: flex-end;
+}
+
+.ai-msg-assistant .ai-msg-text {
+    background: #2b0005;
+}
+
+.ai-msg-placeholder {
+    font-size: 12px;
+    color: #f3c0c0;
+}
+
+@keyframes ai-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes ai-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+    /* On small screens, keep the widget but make
+       the popup span more of the width for readability */
+    #ai-assistant-popup {
+        right: 10px;
+        left: 10px;
+        width: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    #ai-assistant-popup {
+        bottom: 70px;
+        max-height: 60vh;
+        width: 90vw;
+        max-width: 280px;
+        right: 10px;
+        left: auto;
+    }
+
+    .ai-assistant-header {
+        padding: 8px 10px;
+    }
+
+    .ai-assistant-body {
+        padding: 8px 10px 10px;
+        gap: 6px;
+    }
+
+    .ai-assistant-response {
+        max-height: 160px;
+        font-size: 12px;
+    }
+
+    #ai-assistant-input {
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    #ai-assistant-send {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+/* Simulate a quick eye blink by squashing the icon slightly */
+@keyframes ai-eye-blink {
+    0%, 88%, 100% {
+        transform: scaleY(1);
+    }
+    90%, 92% {
+        transform: scaleY(0.6);
+    }
+}
