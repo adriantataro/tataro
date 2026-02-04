@@ -108,8 +108,8 @@ padding: 0.2rem;
 .fa-link:hover {
   color: rgb(255, 123, 0);
 }
-.fa-letterboxd:hover {
-  color: green;
+.fa-imdb:hover {
+  color: yellow;
 }
 
 .content {
