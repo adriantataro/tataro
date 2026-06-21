@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +7,17 @@
     <link rel="icon" type="image/x-icon" href="assets/logo.svg">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="ai-assistant.css">
+    <link rel="stylesheet" href="site-enhancements.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <div id="site-splash" aria-hidden="true">
+        <img src="assets/logo.svg" alt="" class="splash-logo">
+        <div class="splash-spinner"></div>
+        <span class="splash-label">Loading</span>
+    </div>
+
     <div class="banner">
         <div class="navbar">
             <nav>
@@ -20,7 +26,7 @@
                         <img src="assets/logo.svg" class="logo" id="box1">
                     </a>
                 </div>
-                <img src="assets/adrian.svg" class="logo">
+             
                 <div class="openMenu"><i class="fa fa-bars"></i></div>
                 <ul class="mainMenu">
                     <li><a href="index.html">HOME</a></li>
@@ -66,6 +72,13 @@
                         </script>
         </div>
 
+        <!-- Wallpaper UI badges -->
+        <div id="wallpaper-status" role="status" aria-live="polite"></div>
+        <div id="wallpaper-meta">
+            <div id="wallpaper-countdown">Next: <span id="wp-timer">&mdash;</span></div>
+            <div id="wallpaper-source" aria-label="Current image source"></div>
+        </div>
+
         <div class="stars">
             <div class="starsec"></div>
             <div class="starthird"></div>
@@ -105,18 +118,245 @@
                     <button id="ai-assistant-send">Send</button>
                 </div>
                 <div class="ai-assistant-hints">
-                    <span>Ask about sections, projects, or contact info.</span>
-                    <span>© Adrian R. Tataro</span>
+                    <span>Ask about sections, projects, or contact info.<br>© Adrian R. Tataro</span>
                 </div>
             </div>
         </div>
     </div>
     <!-- AIDI Site Assistant - END -->
 
+    <button type="button" id="scroll-top-btn" aria-label="Scroll back to top">
+        <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+    </button>
+
     <script src="https://js.puter.com/v2/"></script>
     <script src="./script.js"></script>
     <script src="./ai-assistant.js"></script>
+    <script src="./site-enhancements.js"></script>
+
+    <script>
+    (function () {
+      'use strict';
+
+      /* ── Constants ─────────────────────────────────────────── */
+      var HOUR_MS   = 60 * 60 * 1000;
+      var OVERLAY   = 'linear-gradient(rgba(3,4,16,0.85), rgba(3,4,16,0.92))';
+      var FALLBACK  = 'url(assets/background.jpg)';
+      var IMG_W     = 1920;
+      var IMG_H     = 1080;
+
+      /* ── DOM refs ───────────────────────────────────────────── */
+      var banner     = document.querySelector('.banner');
+      var statusEl   = document.getElementById('wallpaper-status');
+      var timerEl    = document.getElementById('wp-timer');
+      var sourceEl   = document.getElementById('wallpaper-source');
+
+      if (!banner) return;
+
+      /* ── Hourly seed (YYYYMMDDHH) ──────────────────────────── */
+      function getSeed() {
+        var d = new Date();
+        return '' + d.getFullYear()
+          + pad(d.getMonth() + 1)
+          + pad(d.getDate())
+          + pad(d.getHours());
+      }
+      function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+      /* ── Source definitions ────────────────────────────────── */
+      // Each source returns a direct image URL (no JSON fetch → no CORS issues).
+      // The seed ensures the same image for the whole hour; cache-buster is the seed itself.
+      var SOURCES = [
+        {
+          name: 'Unsplash',
+          url: function (seed) {
+            // source.unsplash.com is the keyless CDN endpoint.
+            // Using a deterministic random topic via the seed hash keeps images varied.
+            var topics = ['nature','architecture','travel','city','landscape','abstract','minimal','dark'];
+            var topic  = topics[parseInt(seed.slice(-2), 10) % topics.length];
+            // sig= makes each seed unique so the CDN doesn't cache the same photo all day
+            return 'https://source.unsplash.com/' + IMG_W + 'x' + IMG_H + '?' + topic + '&sig=' + seed;
+          }
+        },
+        {
+          name: 'Picsum (seeded)',
+          url: function (seed) {
+            // /seed/{seed}/{w}/{h} — deterministic per seed
+            return 'https://picsum.photos/seed/' + seed + '/' + IMG_W + '/' + IMG_H + '?v=' + seed;
+          }
+        },
+        {
+          name: 'Picsum (random)',
+          url: function (seed) {
+            // /' + IMG_W + '/' + IMG_H + ' with a cache-bust query — random each time
+            return 'https://picsum.photos/' + IMG_W + '/' + IMG_H + '?random=' + seed;
+          }
+        }
+        // Source 4 is the CSS fallback (assets/background.jpg) applied in applyFallback()
+      ];
+
+      /* ── Status badge helpers ──────────────────────────────── */
+      function showStatus(msg, type) {
+        if (!statusEl) return;
+        var spinner = (type === 'loading')
+          ? '<span class="wallpaper-spinner"></span>' : '';
+        statusEl.innerHTML = spinner + '<span>' + msg + '</span>';
+        statusEl.className = 'visible' + (type === 'error' ? ' is-error' : '')
+                                        + (type === 'success' ? ' is-success' : '');
+      }
+      function hideStatus(delay) {
+        setTimeout(function () {
+          if (statusEl) statusEl.className = '';
+        }, delay || 0);
+      }
+      function setSourceBadge(name) {
+        if (!sourceEl) return;
+        sourceEl.textContent = 'via ' + name;
+        sourceEl.className = 'visible';
+      }
+
+      /* ── Crossfade helper ──────────────────────────────────── */
+      var afterStyleTag = null;
+      function ensureAfterStyleTag() {
+        if (!afterStyleTag) {
+          afterStyleTag = document.createElement('style');
+          afterStyleTag.id = 'wp-after-style';
+          document.head.appendChild(afterStyleTag);
+        }
+        return afterStyleTag;
+      }
+
+      function applyBackground(imageUrl, sourceName, onDone) {
+        var fullBg = OVERLAY + ', url("' + imageUrl + '")';
+        var img    = new Image();
+
+        img.onload = function () {
+          // Paint new image into ::after, then crossfade
+          ensureAfterStyleTag().textContent =
+            '.banner::after { background-image: ' + fullBg + '; }';
+          banner.classList.add('bg-fading');
+
+          setTimeout(function () {
+            banner.style.backgroundImage = fullBg;
+            banner.classList.remove('bg-fading');
+            ensureAfterStyleTag().textContent =
+              '.banner::after { background-image: none; }';
+            setSourceBadge(sourceName);
+            if (onDone) onDone(true);
+          }, 1500);
+        };
+
+        img.onerror = function () {
+          if (onDone) onDone(false);
+        };
+
+        img.src = imageUrl;
+      }
+
+      function applyFallback() {
+        banner.style.backgroundImage = OVERLAY + ', ' + FALLBACK;
+        setSourceBadge('Local fallback');
+        showStatus('All sources failed — using local image', 'error');
+        hideStatus(4000);
+      }
+
+      /* ── Cascade through sources ───────────────────────────── */
+      function trySource(index, seed) {
+        if (index >= SOURCES.length) {
+          applyFallback();
+          return;
+        }
+        var src = SOURCES[index];
+        var url = src.url(seed);
+
+        showStatus(
+          'Trying source ' + (index + 1) + '/' + SOURCES.length + ': ' + src.name + '…',
+          'loading'
+        );
+
+        applyBackground(url, src.name, function (ok) {
+          if (ok) {
+            showStatus('✓ ' + src.name, 'success');
+            hideStatus(2500);
+            // Save which source + seed worked so we can restore on reload
+            try {
+              localStorage.setItem('wp_seed',   seed);
+              localStorage.setItem('wp_source', index);
+              localStorage.setItem('wp_url',    url);
+            } catch (_) {}
+          } else {
+            showStatus(src.name + ' failed — trying next…', 'error');
+            // Short pause so the user can read the error, then try next source
+            setTimeout(function () { trySource(index + 1, seed); }, 800);
+          }
+        });
+      }
+
+      /* ── Countdown display ─────────────────────────────────── */
+      function msUntilNextHour() {
+        var now  = new Date();
+        var next = new Date(now.getFullYear(), now.getMonth(), now.getDate(),
+                            now.getHours() + 1, 0, 0, 0);
+        return next - now;
+      }
+      function fmtMs(ms) {
+        var s = Math.max(0, Math.floor(ms / 1000));
+        var m = Math.floor(s / 60); s = s % 60;
+        return pad(m) + 'm ' + pad(s) + 's';
+      }
+      function startCountdown() {
+        (function tick() {
+          if (timerEl) timerEl.textContent = fmtMs(msUntilNextHour());
+          setTimeout(tick, 1000);
+        })();
+      }
+
+      /* ── Scheduler: fire at the top of each hour ───────────── */
+      function scheduleNext() {
+        setTimeout(function () {
+          trySource(0, getSeed());
+          scheduleNext();
+        }, msUntilNextHour());
+      }
+
+      /* ── Init ──────────────────────────────────────────────── */
+      (function init() {
+        var currentSeed = getSeed();
+        var restored    = false;
+
+        // Try to restore from localStorage (same hour, same source URL)
+        try {
+          var cachedSeed   = localStorage.getItem('wp_seed');
+          var cachedUrl    = localStorage.getItem('wp_url');
+          var cachedSrcIdx = parseInt(localStorage.getItem('wp_source') || '0', 10);
+
+          if (cachedSeed === currentSeed && cachedUrl) {
+            var srcName = (SOURCES[cachedSrcIdx] || {}).name || 'Cached';
+            // Silently probe — if the cached URL still works, apply it
+            var probe = new Image();
+            probe.onload = function () {
+              banner.style.backgroundImage =
+                OVERLAY + ', url("' + cachedUrl + '")';
+              setSourceBadge(srcName + ' (cached)');
+            };
+            probe.onerror = function () {
+              // Cache stale — fall through to fresh load
+              trySource(0, currentSeed);
+            };
+            probe.src = cachedUrl;
+            restored = true;
+          }
+        } catch (_) {}
+
+        if (!restored) {
+          trySource(0, currentSeed);
+        }
+
+        startCountdown();
+        scheduleNext();
+      })();
+
+    })();
+    </script>
 </body>
 </html>
-
-
